@@ -1,16 +1,4 @@
-# simple_calculator
+# Calculator
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A new Flutter Calculator Project.
+UI inspired from [Figma](<https://www.figma.com/file/bimuVCCjcGaypQ1flNa44e/Calculator-App-Ui-Design-Download-Free-(Community)?type=design&node-id=74%3A244&t=KqBepvwMd5lp0xy7-1>)

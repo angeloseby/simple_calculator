@@ -20,4 +20,28 @@ class FontPallete {
     fontSize: 48,
     color: PalleteLight.evaluatedExpressionColor,
   );
+
+  static final acClearButtonFontStyle = GoogleFonts.poppins(
+    fontWeight: FontWeight.w500,
+    fontSize: 22,
+    color: PalleteLight.clearButtonFg,
+  );
+
+  static final operatorButtonFontStyle = GoogleFonts.poppins(
+    fontWeight: FontWeight.w600,
+    fontSize: 22,
+    color: PalleteLight.operatorButtonFg,
+  );
+
+  static final numberButtonFontStyle = GoogleFonts.poppins(
+    fontWeight: FontWeight.w500,
+    fontSize: 32,
+    color: PalleteLight.numberButtonFg,
+  );
+
+  static final equalButtonFontStyle = GoogleFonts.poppins(
+    fontWeight: FontWeight.w500,
+    fontSize: 32,
+    color: PalleteLight.equalButtonFg,
+  );
 }

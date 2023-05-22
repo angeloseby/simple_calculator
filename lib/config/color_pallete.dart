@@ -4,7 +4,7 @@ class PalleteLight {
   static const scaffoldColor = Color(0xFFF7F8FB);
   static const equalButtonBg = Color(0xFF1991FF);
   static const operatorButtonBg = Color(0xFFADE2FF);
-  static const numberButtonBg = Color(0xFFFFFFFF);
+  static const numberButtonBg = Color(0xFFFBFBFD);
   static const clearButtonBg = Color(0xFFFFFFFF);
   static const functionButtonBg = Color(0xFFFFFFFF);
   static const equalButtonFg = Color(0xFFB2DAFF);
