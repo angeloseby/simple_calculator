@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_calculator/animations/shrink_button_animation.dart';
 import 'package:simple_calculator/config/color_pallete.dart';
 import 'package:simple_calculator/config/font_pallete.dart';
@@ -10,6 +11,7 @@ class OperatorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShrinkButton(
+      onTap: () {},
       child: Container(
         height: 62,
         width: 62,

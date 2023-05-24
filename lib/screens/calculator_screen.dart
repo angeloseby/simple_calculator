@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_calculator/config/font_pallete.dart';
+import 'package:simple_calculator/services/expression_value_provider.dart';
 import 'package:simple_calculator/widgets/backspace_button.dart';
-import 'package:simple_calculator/widgets/clear_button.dart';
+import 'package:simple_calculator/widgets/all_clear_button.dart';
 import 'package:simple_calculator/widgets/function_button.dart';
 import 'package:simple_calculator/widgets/number_button.dart';
 import 'package:simple_calculator/widgets/operator_button.dart';
@@ -11,25 +13,23 @@ import 'package:simple_calculator/widgets/equal_button.dart';
 // TODO:Implement a shadow behind equal button
 // TODO:Make responsive to every screen
 
-class CalculatorScreen extends StatelessWidget {
+class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
 
   @override
+  State<CalculatorScreen> createState() => _CalculatorScreenState();
+}
+
+class _CalculatorScreenState extends State<CalculatorScreen> {
+  @override
+  void initState() {
+    Provider.of<ExpressionValueProvider>(context, listen: false)
+        .initialBuildExpressionWidgetList();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String currentValue = '0';
-    List<String> expressionList = ['0'];
-    List<String> operatorsList = ['/', '*', '+', '-'];
-    List<InlineSpan> widgetList = [];
-
-    for (String item in expressionList) {
-      widgetList.add(TextSpan(
-        text: item,
-        style: operatorsList.contains(item)
-            ? FontPallete.expressionOperatorFontStyle
-            : FontPallete.expressionNumberFontStyle,
-      ));
-    }
-
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
@@ -41,30 +41,35 @@ class CalculatorScreen extends StatelessWidget {
               flex: 2,
               child: Container(
                 alignment: Alignment.centerRight,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    SingleChildScrollView(
-                      reverse: true,
-                      scrollDirection: Axis.horizontal,
-                      child: Text.rich(
-                        TextSpan(
-                          children: widgetList,
+                child: Consumer<ExpressionValueProvider>(
+                    builder: (context, snapshot, child) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SingleChildScrollView(
+                        reverse: true,
+                        scrollDirection: Axis.horizontal,
+                        child: Text.rich(
+                          TextSpan(children: snapshot.widgetList),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      currentValue,
-                      style: FontPallete.evaluatedExpressionFontStyle,
-                    )
-                  ],
-                ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      SingleChildScrollView(
+                        reverse: true,
+                        scrollDirection: Axis.horizontal,
+                        child: Text(
+                          snapshot.currentValue,
+                          style: FontPallete.evaluatedExpressionFontStyle,
+                        ),
+                      )
+                    ],
+                  );
+                }),
               ),
             ),
             Expanded(

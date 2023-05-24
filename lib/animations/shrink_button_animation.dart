@@ -4,11 +4,13 @@ class ShrinkButton extends StatefulWidget {
   final Widget child;
   final double shrinkScale;
   final int animationDuration;
+  final void Function()? onTap;
   const ShrinkButton({
     super.key,
     required this.child,
     this.shrinkScale = 0.95,
     this.animationDuration = 50,
+    this.onTap,
   });
 
   @override
@@ -36,6 +38,9 @@ class _ShrinkButtonState extends State<ShrinkButton>
         Future.delayed(const Duration(milliseconds: 200), () {
           _animationController.reverse();
         });
+        if (widget.onTap != null) {
+          widget.onTap!();
+        }
       },
       child: ScaleTransition(
         scale: Tween<double>(begin: 1.0, end: widget.shrinkScale)
