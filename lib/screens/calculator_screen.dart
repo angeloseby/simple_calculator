@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
@@ -23,8 +24,6 @@ class CalculatorScreen extends StatefulWidget {
 class _CalculatorScreenState extends State<CalculatorScreen> {
   @override
   void initState() {
-    Provider.of<ExpressionValueProvider>(context, listen: false)
-        .initialBuildExpressionWidgetList();
     super.initState();
   }
 
@@ -47,20 +46,27 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      SingleChildScrollView(
-                        reverse: true,
-                        scrollDirection: Axis.horizontal,
-                        child: Text.rich(
-                          TextSpan(children: snapshot.widgetList),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
+                      Container(
+                        height: 40,
+                        alignment: Alignment.centerRight,
+                        child: ListView.builder(
+                          reverse: true,
+                          dragStartBehavior: DragStartBehavior.down,
+                          itemCount: snapshot.expressionListViewer.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: ((context, index) {
+                            return Text(
+                              snapshot.expressionListViewer[index],
+                              style: snapshot.operatorsList.contains(
+                                      snapshot.expressionListViewer[index])
+                                  ? FontPallete.expressionOperatorFontStyle
+                                  : FontPallete.expressionNumberFontStyle,
+                            );
+                          }),
                         ),
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
                       SingleChildScrollView(
-                        reverse: true,
+                        reverse: false,
                         scrollDirection: Axis.horizontal,
                         child: Text(
                           snapshot.currentValue,
@@ -113,7 +119,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                     AcClearButton(),
                     BackspaceButton(),
                     OperatorButton(operatorSymbol: '/'),
-                    OperatorButton(operatorSymbol: 'X'),
+                    OperatorButton(operatorSymbol: 'x'),
                     NumberButton(operatorSymbol: '7'),
                     NumberButton(operatorSymbol: '8'),
                     NumberButton(operatorSymbol: '9'),

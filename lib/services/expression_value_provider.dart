@@ -1,11 +1,17 @@
+import 'dart:math';
+
+import 'package:expressions/expressions.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_calculator/config/font_pallete.dart';
 
 class ExpressionValueProvider extends ChangeNotifier {
   String currentValue = '0';
   List<String> expressionList = ['0'];
+  List<String> expressionListViewer = ['0'];
+  List<String> operatorsList = ['/', 'x', '+', '-'];
   List<TextSpan> widgetList = [];
-
+  late Expression expression;
+  final evaluator = const ExpressionEvaluator();
+  var context = {'x': pi / 5, 'cos': cos, 'sin': sin};
   handleBackspace() {
     if (currentValue.length > 1) {
       currentValue = currentValue.substring(0, currentValue.length - 1);
@@ -19,6 +25,7 @@ class ExpressionValueProvider extends ChangeNotifier {
   handleAllClear() {
     currentValue = '0';
     expressionList = ['0'];
+    expressionListViewer = ['0'];
     notifyListeners();
   }
 
@@ -137,34 +144,44 @@ class ExpressionValueProvider extends ChangeNotifier {
           break;
         }
     }
-
     notifyListeners();
   }
 
-  updateExpressionWidgetList() {
-    List<String> operatorsList = ['/', '*', '+', '-'];
-    widgetList.clear();
-    for (String item in expressionList) {
-      widgetList.add(TextSpan(
-        text: item,
-        style: operatorsList.contains(item)
-            ? FontPallete.expressionOperatorFontStyle
-            : FontPallete.expressionNumberFontStyle,
-      ));
+  handleOperatorPress(pressedOperator) {
+    if (currentValue[currentValue.length - 1] != '.') {
+      if (expressionList.length - 1 != pressedOperator) {
+        if (expressionList.length == 1 &&
+            (expressionList[expressionList.length - 1] == '0')) {
+          expressionList = [];
+          expressionListViewer = [];
+          notifyListeners();
+        }
+        updateExpressionList(currentValue);
+        updateExpressionList(pressedOperator);
+        currentValue = '0';
+        notifyListeners();
+      }
     }
+  }
+
+  updateExpressionList(value) {
+    expressionList.add(value);
+    expressionListViewer.insert(0, value);
     notifyListeners();
   }
 
-  initialBuildExpressionWidgetList() {
-    print("initialBuildExpressionList");
-    List<String> operatorsList = ['/', '*', '+', '-'];
-    for (String item in expressionList) {
-      widgetList.add(TextSpan(
-        text: item,
-        style: operatorsList.contains(item)
-            ? FontPallete.expressionOperatorFontStyle
-            : FontPallete.expressionNumberFontStyle,
-      ));
+  handleEqualPress() {
+    updateExpressionList(currentValue);
+    currentValue = '0';
+    if (!(operatorsList.contains(expressionList.last))) {
+      String expressionString = expressionList.join();
+      expressionString = expressionString.replaceAll('x', '*');
+      expression = Expression.parse(expressionString);
+      var result = evaluator.eval(expression, context);
+      currentValue = result.toString();
+      expressionList = ['0'];
+      expressionListViewer = ['0'];
+      notifyListeners();
     }
   }
 }
